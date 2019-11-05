@@ -1,0 +1,107 @@
+@extends('layout')
+
+@section('content')
+<div>
+	<a href="{{url('administrative/push/list')}}" id="search_btn" type="button" class="btn btn-primary btn-sm button_style">목록</a>
+</div>
+<br>
+<div class="tab-pane" id="tab_1">
+	<div class="portlet box blue">
+		<div class="portlet-title">
+			<div class="caption">
+				<i class="fa fa-gift"></i>푸시
+			</div>
+			<div class="tools">
+				<a href="javascript:;" class="collapse">
+				</a>
+				<a href="#portlet-config" data-toggle="modal" class="config">
+				</a>
+				<a href="javascript:;" class="reload">
+				</a>
+				<a href="javascript:;" class="remove">
+				</a>
+			</div>
+		</div>
+		<div class="portlet-body form">
+			<form class="horizontal-form" id="push-form" method="post" action="{{url('administrative/dopush')}}">
+				<div class="form-body">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">제목(0/40 bytes)<span style="color: red;">*</span></label>
+								<input type="text" name="title" class="form-control" value="@if($item != null){{$item->TITLE}} @endif" required>
+							</div>
+						</div>										
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="control-label">내용(0/100 bytes)<span style="color: red;">*</span></label>
+								<textarea name="contents" class="form-control" rows="6" required>@if($item != null){{$item->CONTENTS}} @endif</textarea>
+							</div>
+						</div>
+					</div>
+					<input type="hidden" name="id" value="@if($item != null){{$item->ID}} @endif"/>
+					<div class="row">
+						<div class="col-md-12">
+							@if($item != null)
+							<button type="submit" class="btn btn-primary btn-sm button_style">수정 및 발송</button>
+							@endif
+							@if($item == null)
+							<button type="submit" class="btn btn-primary btn-sm button_style">발송</button>
+							@endif
+							@if($item != null)
+							<button type="reset" class="btn btn-default btnn-sm" id="remove_button">삭제</button>
+							@endif
+						</div>
+					</div>			
+				</div>
+			</form>			
+		</div>
+	</div>
+</div>
+
+
+<script src="{{url('js/jquery.validate.js')}}" type="text/javascript"></script>
+<script type="text/javascript">
+	$('#push-form').validate({
+		rules: {
+			title: {
+				required: true
+			},
+			contents: {
+				required: true
+			}
+		},
+		messages: {
+			title: {
+				required: "필수로 입력하셔야 합니다"
+			},
+			contents: {
+				required: "필수로 입력하셔야 합니다"
+			}
+		}
+	});
+	$('#remove_button').on('click' , function(e) {
+		if(!confirm("정말 삭제하시겠습니까?")) {
+			return;
+		}
+		run_waitMe($('.page-content'), 2, 'bounce');            
+		$.ajax({
+			url: "{{url('/administrative/doRemove')}}", 
+            type: 'POST',
+            data: {
+            	id: "@if($item != null){{$item->ID}} @endif" ,
+            	type: "push"
+            } , 
+            success: function(result){         
+            	$('.page-content').waitMe('hide');      
+                //console.log(result);    
+                if(result.status == 'success') {
+                	location.href = "/administrative/push/list";
+                }
+           	}
+     	}); 
+	})
+</script>
+@endsection

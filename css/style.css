@@ -1,0 +1,43 @@
+ul.nav-tabs li a.active{
+	background-color: #3598dc !important;
+	color: white;
+}
+
+ul.nav-tabs li a:hover{
+	background-color: #3598dc !important;
+	color: white;
+}
+
+#btn-paymentlog
+{
+	float:right;
+}
+
+.border-none{
+	border:none !important;
+}
+
+.flex-between{
+	justify-content: space-between!important; 
+	display:flex !important;
+}
+
+.flex-center{
+	justify-content: center !important; 
+	display:flex !important
+}
+
+.clear-margin-bottom{
+	margin-bottom:0 !important;
+}
+
+.space-margin{
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+#template{
+	display:none;
+}
